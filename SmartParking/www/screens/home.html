@@ -1,0 +1,84 @@
+<ion-view view-title="Login" class="home-view" can-swipe-back="false">
+	<ion-content class="main-content" has-bouncing="false" scroll="false">
+  		<div id="map" data-tap-disabled="true" class="data-type-disabled">
+        	<ui-gmap-google-map control="map" center='map.center' zoom='map.zoom'  options='map.options' pan='true' events="map.events" ng-cloak>
+           		<ui-gmap-marker idKey='1' control="map.location" coords="map.location.position"  options="map.location.options" icon="'icon'"  events="map.location.events" >
+				</ui-gmap-marker>
+                <ui-gmap-marker idKey='3' control="asigned" coords="asigned.position"  options="asigned.options" icon="'icon'"   >
+				</ui-gmap-marker>
+        	</ui-gmap-google-map>
+        </div>
+        <div id="map-info" class="map-info">
+       		<ion-header-bar >
+            	<div class="buttons left">
+					<!--button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button-->
+				</div>
+				<div class="logo"></div>
+                <div class="buttons right">
+					<button class="button button-icon button-clear ion-android-more-vertical" ></button>
+                    
+				</div>
+			</ion-header-bar>
+            <ion-content class="directions-content">
+            	<div class="titulo">{{asigned.zoneName}}, parking {{asigned.parkId}}</div>
+                <div class="subtitulo">you will arrive in {{asigned.time}} min.</div>
+                <i class="icon ion-ios-navigate-outline icon-title"></i>
+                <div id="area1">
+                <div class="distance">{{asigned.distance}}<br><span>METERS</span></div>
+                <!--div class="distance" style="left: 3vh;right: 50vw;font-weight: 100;font-size: 4vh;">{{getTimeRem()}}<br><span>remaining</span></div-->
+                	<div class="box-cont">
+                    	<button style="border-left:0px !important;">Save<br>parking</button>
+                        <button ng-click="backToSelect()">Change<br>parking</button>
+                    </div>
+                	<div class="cicrledata">
+                	<div class="parkType" style="-webkit-mask-image:url('img/icons/{{asigned.typeName}}.png')"></div>
+                    </div>
+                    
+                </div>
+                <div id="area2">5 min ago, you had found 10 places more</div>
+            </ion-content>
+        </div>
+        
+        <div id="general-info" class="general-info" ng-hide="parkselected">
+        	<div class="loading-info ng-hide" ng-show="info_loading && !info_error">
+            	<div class="logo"></div>
+            	<ion-spinner icon="lines" ></ion-spinner>
+            	<div>{{dictionary.Home[1]}}<br>{{dictionary.Home[2]}}</div>
+            </div>
+            <div class="loading-info ng-hide" ng-show="!info_loading && info_error">
+            	<div class="logo"></div>
+            	<ion-spinner icon="lines" ></ion-spinner>
+            	<div style="padding-left: 7vw;padding-right: 7vw;">{{dictionary.Home[9]}}</div>
+            </div>
+            <div id="info_info" class="info ng-hide" ng-show="!info_loading && !info_error">
+            	<ion-header-bar align-title="left" >
+                <div class="buttons left">
+					<button class="button button-clear" style="position: absolute; width: auto; max-width: 100vh; top: 0px;bottom: 0px;margin: auto;left: 2vh;" ng-click="logout()">Exit</button>
+				</div>
+					<h1 class="title">{{dictionary.Home[3]}}</h1>
+				</ion-header-bar>
+                <ion-slide-box on-slide-changed="slideHasChanged($index)">
+                
+                	<ion-slide ng-repeat="parking in parkings">
+                		<div class="zone-name"><i class="icon ion-ios-location-outline"></i>{{dictionary.Home[4]+" "+parking.name}}</div>
+                        <div class="zone-description">{{parking.description}}</div>
+                        <div class="availability-content">
+                        	<div class="main-availability availables {{getTotalAvailable(parking.seats)==0?'none':''}}" style="margin:0px;"><h1>{{parking.seats | getTotalAvailable}}</h1><h2>{{dictionary.Home[5]}}</h2></div>
+                            <div class="main-availability"><h1>{{parking.seats | getTotalSeats}}</h1><h2>{{dictionary.Home[6]}}</h2></div>
+                        </div>
+                        <div class="availability-content tipos">
+                        	<div class="tipo-av" ng-repeat="tipo in parking.seats"><i style="-webkit-mask-image:url('img/icons/{{tipo.type}}.png')"></i>{{tipo.available}}</div>
+                        </div>
+                         <div class="availability-content foot">	
+                         <div class="blk"></div><i class="icon ion-clock"></i><div class="blk"></div>
+                         <div class="txt">...</div>
+                         
+                         </div>
+                	</ion-slide>
+                	
+                </ion-slide-box>
+                <button class="pick-park" ng-click="parkHere()">{{dictionary.Home[7]}}</button>
+            </div>
+        </div>
+	</ion-content>
+</ion-view>
